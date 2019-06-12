@@ -11,9 +11,15 @@ errors.append("You are not allowed. Please contact your company admin")
 errors.append("You are not allowed. Please contact system admin")
 errors.append("You company reached max. user limit. please contact with us and upgrade your plan")
 
+current_company_id = -1
 
 
+@api_view(['POST'])
+def login_company(request):
+    if request.method == 'POST':
         
+        current_company_id = int(request.data.get('company'))
+        return Response("OK", status=status.HTTP_201_CREATED)
 
 # Create your views here.
 @api_view(['POST'])
@@ -24,11 +30,12 @@ def create_user(request):
 
     if request.method == 'POST':
         
+#         First login with the user
+        
         # get current user
 #         curr_user = request.user
-        curr_user = User.objects.get(pk=2)
-        company_id = 1
-        curr_company =  Company.objects.get(pk=1) 
+        curr_user = User.objects.get(pk=2) # this is cardcoded
+        curr_company =  Company.objects.get(pk=current_company_id) 
         
         #@## block using role system
         p1 = Permission.objects.filter(name='Create User')[0]

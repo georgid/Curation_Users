@@ -29,7 +29,9 @@ class Company(models.Model):
         return self.license.num_users_allowed
     
     def get_num_users(self):
-        
+        '''
+        get the number of allowed users
+        '''
         return User_Company_Role.get_num_users(self.pk)
     
         
@@ -125,5 +127,3 @@ class  Permission_Role(models.Model):
             else:
                 return None
             
-    
-#     models.CharField(max_length=50)
