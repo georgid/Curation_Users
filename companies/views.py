@@ -11,7 +11,7 @@ errors.append("You are not allowed. Please contact your company admin")
 errors.append("You are not allowed. Please contact system admin")
 errors.append("You company reached max. user limit. please contact with us and upgrade your plan")
 
-current_company_id = -1
+current_company_id = 1 # default company
 
 
 @api_view(['POST'])
@@ -45,7 +45,7 @@ def create_user(request):
             return Response(errors[error_id-1], status=status.HTTP_400_BAD_REQUEST)
         
         ##### block using license system
-        error_id = 3
+        error_id = 3 # hard code
         if curr_company.get_num_users() == curr_company.get_allowed_users():
             return Response(errors[error_id-1], status=status.HTTP_400_BAD_REQUEST)
         
