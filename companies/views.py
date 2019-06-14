@@ -11,13 +11,13 @@ errors.append("You are not allowed. Please contact your company admin")
 errors.append("You are not allowed. Please contact system admin")
 errors.append("You company reached max. user limit. please contact with us and upgrade your plan")
 
-current_company_id = 1 # default company
+current_company_id = 2 # default company
 
 
 @api_view(['POST'])
 def login_company(request):
     if request.method == 'POST':
-        
+        global current_company_id
         current_company_id = int(request.data.get('company'))
         return Response("OK", status=status.HTTP_201_CREATED)
 
