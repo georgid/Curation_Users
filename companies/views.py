@@ -34,7 +34,7 @@ def create_user(request):
         
         # get current user
 #         curr_user = request.user
-        curr_user = User.objects.get(pk=2) # this is cardcoded
+        curr_user = User.objects.get(pk=2) # user is hardcoded
         curr_company =  Company.objects.get(pk=current_company_id) 
         
         #@## block using role system

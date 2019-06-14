@@ -22,15 +22,13 @@ class Company(models.Model):
     
     def get_allowed_users(self):
         '''
-        which license is associated
-        &
-        how many users allowsed according to it
+        how many users allowed according to the license associated to the company
         '''
         return self.license.num_users_allowed
     
     def get_num_users(self):
         '''
-        get the number of allowed users
+        get the number users working in this company
         '''
         return User_Company_Role.get_num_users(self.pk)
     
@@ -77,8 +75,8 @@ class User_Company_Role(models.Model):
     @staticmethod
     def get_num_users(company_id):
         '''
-        retuns the number of users for a given comapany with
-        :param: 
+        retuns the number of users for a given company
+        :param: company_id
         '''
         c = Company.objects.get(pk=company_id)
         users = User_Company_Role.objects.filter(company=c)
@@ -88,7 +86,19 @@ class Permission(models.Model):
     name =   models.CharField(max_length=50)
     code =   models.IntegerField()
     # 1 meeans boeolean, 2 means numeric
-    Type = models.IntegerField()  
+    Type = models.IntegerField() 
+    
+    def get_role_error(self, role):
+        '''
+        if with the given role the permission is allowed. Returns error if not allowed. 
+        Returns empty object otherwise
+        
+        :param role - the given role
+        :return - returns the error 
+        '''
+        q1 = Permission_Role.objects.filter(role = role)
+        q2 = q1.filter(permission = self) 
+        return q2   
     
     
     
@@ -119,11 +129,10 @@ class  Permission_Role(models.Model):
             If it returns None, then the user is allowed to execute the pemission 
             '''
             role = User_Company_Role.get_role(user, company)
-            
-            q1 = Permission_Role.objects.filter(role = role)
-            q2 = q1.filter(permission = permission)
-            if q2:
-                return q2[0].error_id
+            not_allowed = permission.get_role_error(role)
+
+            if not_allowed:
+                return not_allowed[0].error_id
             else:
                 return None
             
